@@ -1,4 +1,7 @@
 import { api } from "./env.js";
+
+// VARIABLE DECLARATIONS
+
 const global = {
     coords : {
         latitude : 0.00,
@@ -9,22 +12,25 @@ const global = {
 
 const mainLocImage = document.getElementById('header-loc-img');
 
-// when you first load app, get location details and use lat/long to get current weather
+
+
+// GET USER COORDS AND USE THAT FOR CURRENT WEATHER
 
 navigator.geolocation.getCurrentPosition((pos)=>{
     const { latitude, longitude } = pos.coords;
     global.coords.latitude = latitude;
     global.coords.longitude = longitude
   
-    let query = `${global.coords.latitude},${global.coords.longitude}` || "birmingham";
+    let query = `${global.coords.latitude},${global.coords.longitude}`;
 
+    // fetch data using the Weather API
     const userCurrentWeather = fetchWeatherAPIData('current', query);
 
     //resource for User Current Location
     userCurrentWeather.then(byLocation=>{
         console.log(byLocation)
         mainLocImage.src = byLocation.current.condition.icon
-        console.log(byLocation.current.condition.icon);
+        
     });
 
     
