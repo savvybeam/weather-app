@@ -71,25 +71,22 @@ body {
 
 
 #your-loc-image-div #your-temp-wrapper{
-    font-size: 12px;
+    font-size: 20px;
 }
 
 #weather-text{
     font-family: 'Bagel Fat One', cursive;
 }
 
-#your-loc-details #date-time{
-  color: lightgrey;
-  font-family: 'Nanum Pen Script', cursive;
+#your-loc-details #date-time {
+    color: #9b1a34 ;
+    font-size: 20px;
+    font-family: 'Nanum Pen Script', cursive;
 }
 
 #city-ticker{
     font-size: 27px;
     font-family: 'Bagel Fat One', cursive;
-}
-
-#date-time{
-    color: var(--body-secondary-color);
 }
 
 .fa{
@@ -136,6 +133,8 @@ body {
 
 #add-new-btn {
     position: absolute;
+    top: 55vh;
+    left: 515px;
     width: 50px;
     height: 50px;
     border: 2px solid var(--button-secondary-color);
@@ -167,12 +166,13 @@ body {
     border-radius: 15px;
     margin-left: 20px;
     width: 400px;
-    transition
+    transform: translateX(0px);
+    transition: transform 0.2s ease-out;
 }
 
 #new-location-list.hide {
     transform: translate(500px);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .location-item{
@@ -195,18 +195,18 @@ body {
     left: 80px;
     padding: 10px;
     margin-left: 20px;
-    display: none;
     width: 400px;
-    transform: translateX(500px);
+    transform: translateX(-500px);
+    transition: transform 0.2s ease-out;
     border-radius: 10px;
-    background: #e6d3d3;
-    opacity: 0.5;
+    background: #fff;
+    opacity: 0.9;
+    font-family: 'Nanum Pen Script', cursive;
 }
 
 #create-new-location-wrapper.show{
-    display:block;
     transform: translateX(0px);
-    transition: transform 2s ease-out;
+    transition: transform 0.2s ease-out;
 }
 
 #close-add-form-btn {
@@ -237,16 +237,16 @@ body {
     }
 
 #submit-btn {
-        margin-top: 10px;
-        background-color: var(--button-secondary-color);
-        background: transparent;
-        border: 2px solid var(--button-secondary-color);
-        height: 40px;
-        width: 80px;
-        border-radius: 40px;
-        padding: 5px;
-        /*cursor: pointer;*/
-    }
+    margin-top: 10px;
+    background-color: var(--button-secondary-color);
+    background: transparent;
+    border: 2px solid var(--button-secondary-color);
+    height: 40px;
+    width: 80px;
+    border-radius: 40px;
+    padding: 5px;
+    cursor: pointer;
+}
 
     #submit-btn i {
         color: var(--button-secondary-color);
