@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather - </title>
+    <script src="https://kit.fontawesome.com/d6037f8483.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="script.js" defer type="module"></script>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -12,33 +14,40 @@
         <div id="container">
             <section id="header">
                 <div id="your-loc-image-div">
-                    <img id="header-loc-img" src="" alt="cloud-type">
-                    <div id="your-temp">
-                        <span id="temp"></span>
-                        <span id="temp_feels"></span>
+                    <div id="your-temp-img-wrapper">
+                        <img id="header-loc-img" alt="">
+                        <div id="weather-text"></div>
                     </div>
+                    <div id="your-temp-wrapper">
+                        <p>Main: <span id="temp"></span></p>
+                        <p>Feels Like: <span id="temp_feels"></span></p>
+                    </div>
+                    
                 </div>
                 <div id="your-loc-details">
                     <h3 id="city-ticker"><!-- City --></h3>
                     <small id="date-time"></small>
-                    <div id="weather-ticker"></div>
+                    <!-- <div id="weather-ticker"></div> -->
                 </div>
+                <span id="loader"><span>Loading...</span></span>
             </section>
             <section id="added-weather-location">
                 <div id="new-location-add">
-                    <button id="add-new-btn"></button>
+                    <button id="add-new-btn"><i class="fa fa-plus"></i></button>
                 </div>
-                <div id="new-location-list">
-                    <div class="location-item">
-                        <div class="new-loc-image">
-                            <img src="" alt="" class="loc-img">
+                <div id="create-new-location-wrapper">
+                    <form id="newLocationForm">
+                        <div id="new-location-form-wrapper">
+                            <div>
+                                <input type="text" name="new-location-input" id=""new-loc-input" placeholder="Enter New City">
+                            </div>
+                            <div>
+                                <button class="btn btn-primary"><i class="fa fa-plus"> New Location</i></button>
+                            </div>
                         </div>
-                        <div class="new-loc-details">
-                            <h4 class="loc-name"></h4>
-                            <p class="loc-details"></p>
-                        </div>
-                    </div>
+                    </form>
                 </div>
+                <div id="new-location-list"><!-- Spit out Location List --></div>
             </section>
         </div>
 
@@ -68,23 +77,10 @@
                     <div class="location-details-items">
                         <i class="fas fa-something"></i><span class="details-note"></span>
                     </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
+                
                 </div>
             </article>
+            
         </div>
 </body>
 </html>

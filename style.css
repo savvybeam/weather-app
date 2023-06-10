@@ -4,8 +4,19 @@
     box-sizing: border-box;
 }
 
+/* 
+FONTS
+*/
+
+/* Bagel Fat One */
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
+
+/* Nanum Pen Script */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
 body{
     background-color: #e7ebeb;
+    font-family: 'Nanum Pen Script', cursive;
 }
 
 #container{
@@ -14,12 +25,13 @@ body{
     overflow: hidden;
     margin: 5% auto;
     width: 600px;
-    height: 700px;
+    height: 700px auto;
     border: 1px solid lightgrey;
     background: linear-gradient(30deg,  rgb(228, 218, 218) 70%, rgb(230, 221, 221) 20%);
 }
 
 #header{
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,26 +43,116 @@ body{
 
 #your-loc-image-div{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    border-radius: 50%;
 }
 
 #your-loc-image-div img{
     height: 64px;
     width: 64px;
+    outline: none;
 }
 
-#your-loc-image-div #your-temp{
-    display: flex;
-    flex-direction: column;
+
+#your-loc-image-div #your-temp-wrapper{
+    font-size: 12px;
+}
+
+#weather-text{
+    font-family: 'Bagel Fat One', cursive;
 }
 
 #your-loc-details #date-time{
   color: lightgrey;
-
+  font-family: 'Nanum Pen Script', cursive;
 }
 
-#
+#city-ticker{
+    font-size: 27px;
+    font-family: 'Bagel Fat One', cursive;
+}
 
+.fa{
+    color: rgb(215, 164, 146);
+}
+
+#loader{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(195, 125, 125);
+    width: 100%;
+    height: 150px;
+    padding: 30px;
+    z-index: 1;
+    opacity: 0.5;
+    background-color: black;
+    color: #fff;
+}
+
+#loader span{
+    margin: auto;
+    width: 200px;
+    font-size: 20px;
+    transition: all 0.3s;
+}
+
+#loader .show{
+    display: block;
+}
+
+#added-weather-location{
+    display: flex;
+    padding: 30px;
+}
+
+#new-location-add #add-new-btn{
+    width: 150px;
+    height: 150px;
+    transition:all 0.2s;
+    border: 1px solid rgb(195, 125, 125);
+    border-radius: 15px;
+}
+
+#new-location-add #add-new-btn .fa-plus{
+    font-size: 20px;
+}
+
+#add-new-btn:hover{
+    background-color: rgb(195, 125, 125);
+}
+
+#add-new-btn:hover i{
+    color: #fff;
+}
+
+#new-location-list{
+    background-color: #e7ebeb;
+    padding: 10px;
+    border-radius: 15px;
+    margin-left: 20px;
+    width: 500px;
+}
+
+#new-location-list.hide{
+    transform: translateX(500px);
+    transition: transform 0.2s ease-out;
+}
+
+.location-item{
+    display: flex;
+    justify-content: space-between;
+    background-color:  rgb(193, 171, 171);
+    height: auto;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: transform 1s ease;
+}
+
+.location-item:hover{
+    transform: scale(1.05, 1.05);
+}
