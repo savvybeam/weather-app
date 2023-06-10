@@ -1,4 +1,5 @@
 import { api } from "./env.js";
+import { getWordedWeekDay, getWordedMonth, formatDate } from "./datetime-helper.js";
 
 // VARIABLE DECLARATIONS
 
@@ -45,8 +46,11 @@ const weatherText = document.getElementById('weather-text');
 const dateTime = document.getElementById('date-time');
 const loader = document.getElementById('loader');
 const showAddBtn = document.getElementById('add-new-btn');
+const locationFrm = document.getElementById('newLocationForm');
 const newLocationList = document.querySelector('#new-location-list');
 const createLocationDiv = document.getElementById('create-new-location-wrapper');
+const formCloseBtn = document.getElementById('close-add-form-btn');
+const newInput = document.getElementById('new-loc-input');
 
 
 
@@ -126,91 +130,6 @@ const fetchWeatherAPIData = async (endpoint, query) => {
     return data;
 }
 
-const formatDate = (aDate) =>{
-
-    let sd = new Date(aDate);
-    let formatedDate = `${sd.getHours()}:${sd.getMinutes()}, ${getWordedWeekDay(sd.getDay())}, ${getWordedMonth(sd.getMonth())} ${sd.getDate()}, ${sd.getFullYear()}`
-
-    return formatedDate;
-}
-
-const getWordedWeekDay = (weekIndex) =>{
-
-    let wordedDayOfWeek;
-
-    switch(weekIndex){
-        case 0:
-            wordedDayOfWeek = 'Sun'
-            break;
-        case 1:
-            wordedDayOfWeek = 'Mon'
-            break;
-        case 2:
-            wordedDayOfWeek = 'Tue'
-            break;
-        case 3:
-            wordedDayOfWeek = 'Wed'
-        case 4:
-            wordedDayOfWeek = 'Thur'
-            break;
-        case 5:
-            wordedDayOfWeek = 'Fri'
-            break;
-        case 6:
-            wordedDayOfWeek = 'Sat'
-            break;
-    }
-
-    return wordedDayOfWeek;
-}
-
-
-const getWordedMonth = (monthIndex) =>{
-
-    let wordedMonth;
-
-    switch (monthIndex){
-        case 0:
-            wordedMonth = 'Jan'
-            break;
-        case 1:
-            wordedMonth = 'Feb'
-            break;
-        case 2:
-            wordedMonth = 'Mar'
-            break;
-        case 3:
-            wordedMonth = 'Apr'
-            break;
-        case 4:
-            wordedMonth = 'May'
-            break;
-        case 5:
-            wordedMonth = 'Jun'
-            break;
-        case 6:
-            wordedMonth = 'Jul'
-            break;
-        case 7:
-            wordedMonth = 'Aug'
-            break;
-        case 8:
-            wordedMonth = 'Sep'
-            break;
-        case 9:
-            wordedMonth = 'Oct'
-            break;
-        case 10:
-            wordedMonth = 'Nov'
-            break;
-        case 11:
-            wordedMonth = 'Dec'
-            break;
-    }
-
-    return wordedMonth;
-}
-
 
 //Fetch User Added Location Array
 
@@ -259,16 +178,30 @@ const addLocationToDOM = (locObject) =>{
 
 const showCreateLocationForm = () =>{
     newLocationList.classList.add('hide');
+    showAddBtn.style.display = 'none';
     console.log(newLocationList);
     createLocationDiv.classList.add('show');
 }
 
 
-// EVENT LISTENERS
+const closeForm = () => {
+    createLocationDiv.classList.remove('show');
+    newLocationList.classList.remove('hide');
+    showAddBtn.style.display = 'block';
+}
 
+// EVENT LISTENERS
 showAddBtn.addEventListener('click', showCreateLocationForm);
 
+formCloseBtn.addEventListener('click', closeForm);
 
+newInput.addEventListener('focus', () => {
+    createLocationDiv.style.boxShadow = '0px 5px 5px 0px';
+})
+
+newInput.addEventListener('blur', () => {
+    createLocationDiv.style.boxShadow = '';
+})
 
 // ON LOAD CALLS
 
