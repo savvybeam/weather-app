@@ -30,24 +30,15 @@ const alertWrapper = document.getElementById('alert-wrapper');
 
 
 //display loader
-const showLoader = () =>{
-        loader.classList.add('show')
-        console.log(loader)
-}
 
-const removeLoader = () =>{
-        loader.classList.remove('show');
-        console.log(loader)
-}
+
+
 
 
 // GET USER COORDS AND USE THAT FOR CURRENT WEATHER
 
-
-
 setInterval(()=>{ //get location every 1 minute and update
     
-showLoader();
 
 navigator.geolocation.getCurrentPosition((pos)=>{
     const { latitude, longitude } = pos.coords;
@@ -73,8 +64,6 @@ navigator.geolocation.getCurrentPosition((pos)=>{
         addFontAweIconToParent(weatherText, 'fa-map-marker')
         weatherText.innerHTML = weather.current.condition.text;
         dateTime.innerHTML = formatDate(weather.current.last_updated);
-
-        removeLoader();
 
     });
 
@@ -120,28 +109,6 @@ const createAlert = (message, className = 'error') => {
     alertWrapper.appendChild(div);
 }
 
-const getItemsFromLocalStorage = () => {
-    
-    //fetch items from local store
-    return localStorage.getItem('locations');
-
-}
-
-const addLocationToStorage = (location) => {
-
-    let itemsFromLocalStorage = getItemsFromLocalStorage();
-
-    if (itemsFromLocalStorage !== null) {
-        localStore = [];
-        const parsedLocation = JSON.parse(itemsFromLocalStorage);
-        localStore = parsedLocation;
-    } 
-
-    localStore.push(location);
-    localStorage.setItem('locations', JSON.stringify(localStore));
-
-}
-
 const submitNewLocation = (e) => {
     e.preventDefault();
 
@@ -170,7 +137,31 @@ const submitNewLocation = (e) => {
 
     closeForm();
 
-    console.log(`from SubmitNewFunction: ${newLocation}`)
+
+}
+
+
+const addLocationToStorage = (location) => {
+
+    let itemsFromLocalStorage = getItemsFromLocalStorage();
+
+    if (itemsFromLocalStorage !== null) {
+        localStore = [];
+        const parsedLocation = JSON.parse(itemsFromLocalStorage);
+        localStore = parsedLocation;
+    }
+
+    localStore.push(location);
+    localStorage.setItem('locations', JSON.stringify(localStore));
+
+}
+
+
+    //fetch items from local store
+const getItemsFromLocalStorage = () => {
+
+
+    return localStorage.getItem('locations');
 
 }
 
@@ -254,5 +245,5 @@ newInput.addEventListener('blur', () => {
 
 // ON LOAD CALLS
 
-updateUIData();
+document.addEventListener('DOMContentLoaded', updateUIData());
 
