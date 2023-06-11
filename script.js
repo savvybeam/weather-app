@@ -133,7 +133,7 @@ const submitNewLocation = (e) => {
 
 
     //add new Location to DOM
-    updateUIData();
+    getUserFavoriteLocationData();
 
     closeForm();
 
@@ -166,9 +166,10 @@ const getItemsFromLocalStorage = () => {
 }
 
 
-//Fetch User Added Location Array
+//Fetch User Favorite Location from local storage and get additional details from API;
+//then run the additional details into the DOM through the function
 
-const updateUIData = () => {
+const getUserFavoriteLocationData = () => {
 
     let itemsFromStorage = getItemsFromLocalStorage();
 
@@ -178,10 +179,14 @@ const updateUIData = () => {
         newLocationList.innerHTML = `<Span><i class="fa fa-info"></i> Nothing to see here. Click below to add a favorite city.</span>`;
         showCreateLocationForm();
     } else {
-        parsedLocations.forEach(query => {
-            let cityWeatherObj = fetchWeatherAPIData('current', query);
-            cityWeatherObj.then((obj) => addLocationToDOM(obj))
-        });
+        //clear UI
+        newLocationList.innerHTML = '';
+
+            //Add Data to UI
+            parsedLocations.forEach(query => {
+                let cityWeatherObj = fetchWeatherAPIData('current', query);
+                cityWeatherObj.then((obj) => addLocationToDOM(obj))
+            });
     }
 
 }
@@ -191,6 +196,11 @@ const addLocationToDOM = (locObject) => {
 
     const locationItemDiv = document.createElement('div');
     locationItemDiv.classList.add('location-item');
+
+    const cloudDetailsDiv = document.createElement('div');
+    cloudDetailsDiv.classList.add('cloud-details');
+
+    const cloudTextParagraph = document.createElement('span');
 
     const newLocImg = document.createElement('img');
     newLocImg.classList.add('loc-img');
@@ -203,16 +213,23 @@ const addLocationToDOM = (locObject) => {
     locName.classList.add('loc-name');
 
     const locDetails = document.createElement('p');
-    locDetails.classList.add('loc-details')
+    locDetails.classList.add('loc-details');
+
+    const locTime = document.createElement('p');
+    locTime.classList.add('loc-time');
 
 
+    cloudTextParagraph.appendChild(document.createTextNode(locObject.current.condition.text));
+    cloudDetailsDiv.appendChild(newLocImg);
+    cloudDetailsDiv.appendChild(cloudTextParagraph);
     locName.appendChild(document.createTextNode(locObject.location.name));
-    locDetails.appendChild(document.createTextNode(locObject.current.temp_c));
+    locDetails.appendChild(document.createTextNode(locObject.current.temp_c + 'c'));
+    locTime.appendChild(document.createTextNode(locObject.current.last_updated))
     newLocDetails.appendChild(locName);
     newLocDetails.appendChild(locDetails);
-    locationItemDiv.appendChild(newLocImg);
+    newLocDetails.appendChild(locTime)
+    locationItemDiv.appendChild(cloudDetailsDiv);
     locationItemDiv.appendChild(newLocDetails)
-
     newLocationList.appendChild(locationItemDiv);
 
 }
@@ -245,5 +262,5 @@ newInput.addEventListener('blur', () => {
 
 // ON LOAD CALLS
 
-document.addEventListener('DOMContentLoaded', updateUIData());
+document.addEventListener('DOMContentLoaded', getUserFavoriteLocationData());
 

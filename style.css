@@ -212,10 +212,16 @@ body {
     transition: transform 0.2s ease;
 }
 
-.location-item{
+.cloud-details{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.location-item {
     display: flex;
     justify-content: space-between;
-    background-color:  var(--body-secondary-color);
+    background-color: var(--body-secondary-color);
     border-radius: 10px;
     padding: 8px;
     margin-bottom: 10px;
