@@ -7,36 +7,10 @@ const global = {
     coords : {
         latitude : 0.00,
         longitude : 0.00
-    },
-    weatherResult: {},
-    addedLocations : [
-    {
-        city: 'London',
-        temp: 9,
-        img: '//cdn.weatherapi.com/weather/64x64/night/122.png'
-    },{
-        city: 'Bournemouth',
-        temp: 15,
-        img: '//cdn.weatherapi.com/weather/64x64/night/122.png'
-    
-    },{
-        city: 'Leeds',
-        temp: 16,
-        img: '//cdn.weatherapi.com/weather/64x64/night/122.png'
-    
-    },{
-        city: 'Edinburgh',
-        temp: 16,
-        img: '//cdn.weatherapi.com/weather/64x64/night/122.png'
-    
-    },{
-        city: 'Milton Kynes',
-        temp: 12,
-        img: '//cdn.weatherapi.com/weather/64x64/night/122.png'
-    
     }
-]
 }
+
+let localStore = [];
 
 const mainLocImage = document.getElementById('header-loc-img');
 const yourCity = document.getElementById('city-ticker');
@@ -51,6 +25,7 @@ const newLocationList = document.querySelector('#new-location-list');
 const createLocationDiv = document.getElementById('create-new-location-wrapper');
 const formCloseBtn = document.getElementById('close-add-form-btn');
 const newInput = document.getElementById('new-loc-input');
+const alertWrapper = document.getElementById('alert-wrapper');
 
 
 
@@ -84,9 +59,7 @@ navigator.geolocation.getCurrentPosition((pos)=>{
     // fetch data using the Weather API
 
     
-    
-    
-
+   
     const userCurrentWeather = fetchWeatherAPIData('current', query);
 
     //resource for User Current Location
@@ -123,37 +96,114 @@ const addFontAweIconToParent = (parent, iconClass) =>{
     parent.appendChild(pin);
 }
 
-//fetch Weather Data from API
-const fetchWeatherAPIData = async (endpoint, query) => {
-    const response = await fetch(`${api.url}/${endpoint}.json?q=${query}&key=${api.key}`)
-    const data = await response.json();
-    return data;
+const showCreateLocationForm = () =>{
+    newLocationList.classList.add('hide');
+    showAddBtn.style.display = 'none';
+    createLocationDiv.classList.add('show');
+}
+
+
+const closeForm = () => {
+    createLocationDiv.classList.remove('show');
+    newLocationList.classList.remove('hide');
+    showAddBtn.style.display = 'block';
+}
+
+
+const createAlert = (message, className = 'error') => {
+    const div = document.createElement('div');
+    div.classList.add('alert', className);
+    const icon = document.createElement('i');
+    icon.classList.add('fa','fa-info');
+    div.appendChild(icon);
+    div.appendChild(document.createTextNode(message));
+    alertWrapper.appendChild(div);
+}
+
+const getItemsFromLocalStorage = () => {
+    
+    //fetch items from local store
+    return localStorage.getItem('locations');
+
+}
+
+const addLocationToStorage = (location) => {
+
+    let itemsFromLocalStorage = getItemsFromLocalStorage();
+
+    if (itemsFromLocalStorage !== null) {
+        localStore = [];
+        const parsedLocation = JSON.parse(itemsFromLocalStorage);
+        localStore = parsedLocation;
+    } 
+
+    localStore.push(location);
+    localStorage.setItem('locations', JSON.stringify(localStore));
+
+}
+
+const submitNewLocation = (e) => {
+    e.preventDefault();
+
+    let myForm = new FormData(locationFrm);
+
+    let newLocation = myForm.get('new-location-input');
+
+    if (newLocation === '') {
+        createAlert(' Input a City to continue');
+        alertWrapper.classList.add('show');
+        setTimeout(() => {
+            alertWrapper.classList.remove('show');
+            alertWrapper.firstElementChild.remove();
+        }, 4000);
+
+        return;
+    }
+
+    //add new Location to Local Storage
+    addLocationToStorage(newLocation);
+    newInput.value = ''; //set the form input to Empty after submission
+
+
+    //add new Location to DOM
+    updateUIData();
+
+    closeForm();
+
+    console.log(`from SubmitNewFunction: ${newLocation}`)
+
 }
 
 
 //Fetch User Added Location Array
 
-const getAddedLocations = () =>{
-    
-        if(global.addedLocations.length === 0){
-            newLocationList.innerHTML = `<Span>Nothing to Show</span>`;
-        }else{
-            global.addedLocations.forEach(weather=>{
-                addLocationToDOM(weather);
-            })
-        }
+const updateUIData = () => {
+
+    let itemsFromStorage = getItemsFromLocalStorage();
+
+    let parsedLocations = JSON.parse(itemsFromStorage);
+
+    if (parsedLocations === null) {
+        newLocationList.innerHTML = `<Span><i class="fa fa-info"></i> Nothing to see here. Click below to add a favorite city.</span>`;
+        showCreateLocationForm();
+    } else {
+        parsedLocations.forEach(query => {
+            let cityWeatherObj = fetchWeatherAPIData('current', query);
+            cityWeatherObj.then((obj) => addLocationToDOM(obj))
+        });
+    }
 
 }
 
 // Create Location Elements and Add to DOM
-const addLocationToDOM = (locObject) =>{
+const addLocationToDOM = (locObject) => {
 
     const locationItemDiv = document.createElement('div');
     locationItemDiv.classList.add('location-item');
 
     const newLocImg = document.createElement('img');
     newLocImg.classList.add('loc-img');
-    newLocImg.src = locObject.img;
+    newLocImg.src = locObject.current.condition.icon;
 
     const newLocDetails = document.createElement('div');
     newLocDetails.classList.add('new-loc-details');
@@ -165,8 +215,8 @@ const addLocationToDOM = (locObject) =>{
     locDetails.classList.add('loc-details')
 
 
-    locName.appendChild(document.createTextNode(locObject.city));
-    locDetails.appendChild(document.createTextNode(locObject.temp));
+    locName.appendChild(document.createTextNode(locObject.location.name));
+    locDetails.appendChild(document.createTextNode(locObject.current.temp_c));
     newLocDetails.appendChild(locName);
     newLocDetails.appendChild(locDetails);
     locationItemDiv.appendChild(newLocImg);
@@ -176,21 +226,20 @@ const addLocationToDOM = (locObject) =>{
 
 }
 
-const showCreateLocationForm = () =>{
-    newLocationList.classList.add('hide');
-    showAddBtn.style.display = 'none';
-    console.log(newLocationList);
-    createLocationDiv.classList.add('show');
-}
 
 
-const closeForm = () => {
-    createLocationDiv.classList.remove('show');
-    newLocationList.classList.remove('hide');
-    showAddBtn.style.display = 'block';
+//fetch Weather Data from API
+const fetchWeatherAPIData = async (endpoint, query) => {
+    const response = await fetch(`${api.url}/${endpoint}.json?q=${query}&key=${api.key}`)
+    const data = await response.json();
+    return data;
 }
+
 
 // EVENT LISTENERS
+
+locationFrm.addEventListener('submit', submitNewLocation);
+
 showAddBtn.addEventListener('click', showCreateLocationForm);
 
 formCloseBtn.addEventListener('click', closeForm);
@@ -205,5 +254,5 @@ newInput.addEventListener('blur', () => {
 
 // ON LOAD CALLS
 
-getAddedLocations();
+updateUIData();
 

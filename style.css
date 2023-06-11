@@ -27,6 +27,7 @@ FONTS
     --button-primary-color: #00E5E5;
     --body-secondary-color: #FF8E9C;
     --body-primary-color: #FFC0CD;
+    --error-alert: #ff0000;
 }
 
 
@@ -90,7 +91,7 @@ body {
 }
 
 .fa{
-    color: var(--button-secondary-color);
+    color: darkred;
 }
 
 #loader{
@@ -125,16 +126,52 @@ body {
     display: block;
 }
 
+#alert-wrapper{
+    position: absolute;
+    top: -20px;
+    left: 150px;
+    height: 40px;
+    width: 300px;
+    margin: auto;
+    text-align:center;
+    z-index: 99;
+    font-size: 1.5rem;
+}
+
+.alert{
+    overflow:hidden;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--button-primary-color);
+}
+
+.alert .show{
+    display: block;
+}
+
+.success{
+    background-color: var(--button-secondary-color);
+}
+
+.error{
+    background-color: var(--body-secondary-color);
+}
+
 #added-weather-location{
     position: relative;
-    display: flex;
     padding: 30px;
 }
 
-#add-new-btn {
+#new-location-add {
     position: absolute;
     top: 55vh;
     left: 515px;
+    height: auto;
+    padding:5px;
+}
+
+#add-new-btn {
     width: 50px;
     height: 50px;
     border: 2px solid var(--button-secondary-color);
@@ -179,9 +216,8 @@ body {
     display: flex;
     justify-content: space-between;
     background-color:  var(--body-secondary-color);
-    height: auto;
     border-radius: 10px;
-    padding: 10px;
+    padding: 8px;
     margin-bottom: 10px;
     transition: transform 0.3s ease;
 }
@@ -201,7 +237,6 @@ body {
     border-radius: 10px;
     background: #fff;
     opacity: 0.9;
-    font-family: 'Nanum Pen Script', cursive;
 }
 
 #create-new-location-wrapper.show{
@@ -226,15 +261,16 @@ body {
     color: var(--button-secondary-color);
 }
 
-#new-loc-input{
-        width: 350px;
-        height: 50px;
-        background: transparent;
-        border: none;
-        border-bottom: 2px solid grey;
-        outline: none;
-        font-size: 1.2rem;
-    }
+#new-loc-input {
+    width: 350px;
+    height: 50px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid grey;
+    outline: none;
+    font-size: 1.5rem;
+    font-family: 'Nanum Pen Script', cursive;
+}
 
 #submit-btn {
     margin-top: 10px;
@@ -246,6 +282,9 @@ body {
     border-radius: 40px;
     padding: 5px;
     cursor: pointer;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 1.1rem;
+    color: var(--button-secondary-color);
 }
 
     #submit-btn i {
@@ -254,6 +293,7 @@ body {
 
 #submit-btn:hover{
     background: var(--button-secondary-color);
+    color: #fff;
 }
 
 
