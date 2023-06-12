@@ -226,7 +226,6 @@ const addLocationToDOM = (locObject) => {
     const locTime = document.createElement('p');
     locTime.classList.add('loc-time');
 
-
     cloudTextParagraph.appendChild(document.createTextNode(locObject.current.condition.text));
     cloudDetailsDiv.appendChild(newLocImg);
     cloudDetailsDiv.appendChild(cloudTextParagraph);
