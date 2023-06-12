@@ -1,4 +1,4 @@
-import { api } from "./env.js";
+import apiKey from "./env.js";
 import { getWordedWeekDay, getWordedMonth, formatDate } from "./datetime-helper.js";
 
 // VARIABLE DECLARATIONS
@@ -11,6 +11,7 @@ const global = {
 }
 
 let localStore = [];
+const apiURL = "http://api.weatherapi.com/v1";
 
 const yourCity = document.getElementById('city-ticker');
 const temp_deg = document.getElementById('temp');
@@ -245,7 +246,7 @@ const addLocationToDOM = (locObject) => {
 
 //fetch Weather Data from API
 const fetchWeatherAPIData = async (endpoint, query) => {
-    const response = await fetch(`${api.url}/${endpoint}.json?q=${query}&key=${api.key}`)
+    const response = await fetch(`${apiURL}/${endpoint}.json?q=${query}&key=${apiKey}`)
     const data = await response.json();
     return data;
 }
