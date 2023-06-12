@@ -12,15 +12,18 @@
 </head>
 <body>
         <div id="container">
+            <section id="nav">
+                <button id="menu-button" class="closed" title="Timeline"><i class="fa fa-chevron-circle-right"></i></button>
+            </section>
             <section id="header">
                 <div id="your-loc-image-div">
                     <div id="your-temp-img-wrapper">
-                        <img id="header-loc-img" alt="">
+                        <span id="img-span"></span>
                         <div id="weather-text"></div>
                     </div>
                     <div id="your-temp-wrapper">
-                        <p>Main: <span id="temp"></span></p>
-                        <p>Feels Like: <span id="temp_feels"></span></p>
+                        <p><span id="temp"></span></p>
+                        <p><span id="temp_feels"></span></p>
                     </div>
                     
                 </div>
@@ -41,7 +44,7 @@
                     <form id="newLocationForm">
                         <div id="new-location-form-wrapper">
                             <div>
-                                <input type="text" name="new-location-input" id="new-loc-input" placeholder="Track other Favorite Cities: Add new...">
+                                <input type="text" name="new-location-input" id="new-loc-input" placeholder="Track favorite Cities: Add new...">
                             </div>
                             <div>
                                 <button class="btn btn-primary" id="submit-btn"><i class="fa fa-plus"></i> Add</button>
@@ -51,38 +54,45 @@
                 </div>
                 <div id="new-location-list"><!-- Spit out Location List --></div>
             </section>
+
+            <!-- Menu - Timeline -->
+
+            <div class="timeline">
+                <article>
+                    <section id="timeline-header">
+                        <div id="full-loc-image-div">
+                            <h3>Your Location Timeline</h3>
+                        </div>
+                    </section>
+                    <section id="timeline-body">
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">Birmingham: June 11, 2023</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">Smethwick: June 10, 2023</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">Water Orton: June 8, 2023</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">London: October 24, 2022</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">London: October 24, 2022</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">London: October 24, 2022</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">London: October 24, 2022</span>
+                        </div>
+                        <div class="location-details-items">
+                            <i class="fas fa-something"></i><span class="details-note">London: October 24, 2022</span>
+                        </div>
+                    </section>
+                </article>  
+            </div>
         </div>
 
-        <!-- Location Full Details -->
-
-        <div>
-            <article>
-                <header id="location-header">
-                    <div id="full-loc-image-div">
-                        <img src="" alt="">
-                    </div>
-                    <div id="full-loc-details">
-                        <div id="full-cloud-ticker"></div>
-                        <div id="full-weather-ticker"></div>
-                    </div>
-                </header>
-                <div id="location-details-body" class="grid">
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                    <div class="location-details-items">
-                        <i class="fas fa-something"></i><span class="details-note"></span>
-                    </div>
-                
-                </div>
-            </article>
-            
-        </div>
 </body>
 </html>

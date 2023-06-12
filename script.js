@@ -12,7 +12,6 @@ const global = {
 
 let localStore = [];
 
-const mainLocImage = document.getElementById('header-loc-img');
 const yourCity = document.getElementById('city-ticker');
 const temp_deg = document.getElementById('temp');
 const temp_feels = document.getElementById('temp_feels');
@@ -26,6 +25,9 @@ const createLocationDiv = document.getElementById('create-new-location-wrapper')
 const formCloseBtn = document.getElementById('close-add-form-btn');
 const newInput = document.getElementById('new-loc-input');
 const alertWrapper = document.getElementById('alert-wrapper');
+const menuBtn = document.getElementById('menu-button');
+const myLocImg = document.getElementById('img-span');
+const timelineWrapper = document.querySelector('.timeline');
 
 
 
@@ -37,37 +39,41 @@ const alertWrapper = document.getElementById('alert-wrapper');
 
 // GET USER COORDS AND USE THAT FOR CURRENT WEATHER
 
-setInterval(()=>{ //get location every 1 minute and update
-    
+const getMyLocation = () => { //get location every 1 minute and update
 
-navigator.geolocation.getCurrentPosition((pos)=>{
-    const { latitude, longitude } = pos.coords;
-    global.coords.latitude = latitude;
-    global.coords.longitude = longitude
-  
-    let query = `${global.coords.latitude},${global.coords.longitude}`;
 
-    // fetch data using the Weather API
+    navigator.geolocation.getCurrentPosition((pos) => {
+        const { latitude, longitude } = pos.coords;
+        global.coords.latitude = latitude;
+        global.coords.longitude = longitude
 
-    
-   
-    const userCurrentWeather = fetchWeatherAPIData('current', query);
+        let query = `${global.coords.latitude},${global.coords.longitude}`;
 
-    //resource for User Current Location
-    userCurrentWeather.then(weather=>{
-        console.log(weather)
-        mainLocImage.src = weather.current.condition.icon;
-        yourCity.innerHTML = weather.location.name;
-        addFontAweIconToParent(yourCity, 'fa-map-marker')
-        temp_deg.innerHTML = `<span>${weather.current.temp_c}&deg;c</span>`;
-        temp_feels.innerHTML = `<span>${weather.current.feelslike_c}&deg;c</span>`;
-        addFontAweIconToParent(weatherText, 'fa-map-marker')
-        weatherText.innerHTML = weather.current.condition.text;
-        dateTime.innerHTML = formatDate(weather.current.last_updated);
+        // fetch data using the Weather API
+
+        const userCurrentWeather = fetchWeatherAPIData('current', query);
+
+        //resource for User Current Location
+        userCurrentWeather.then(weather => {
+            myLocImg.innerHTML = '';
+            console.log(weather)
+            const myImgEl = document.createElement('img');
+            myImgEl.classList.add('header-loc-img');
+            myImgEl.src = weather.current.condition.icon;
+            myLocImg.appendChild(myImgEl);
+            yourCity.innerHTML = weather.location.name;
+            addFontAweIconToParent(yourCity, 'fa-map-marker')
+            temp_deg.innerHTML = `<span>Main: ${weather.current.temp_c}\u00B0c</span>`;
+            temp_feels.innerHTML = `<span>Feels Like: ${weather.current.feelslike_c}\u00B0c</span>`;
+            addFontAweIconToParent(weatherText, 'fa-map-marker')
+            weatherText.innerHTML = weather.current.condition.text;
+            dateTime.innerHTML = formatDate(weather.current.last_updated);
+
+        });
 
     });
 
-})}, 60000);
+}
 
 
 
@@ -103,7 +109,7 @@ const createAlert = (message, className = 'error') => {
     const div = document.createElement('div');
     div.classList.add('alert', className);
     const icon = document.createElement('i');
-    icon.classList.add('fa','fa-info');
+    icon.classList.add('fa','fa-info-circle');
     div.appendChild(icon);
     div.appendChild(document.createTextNode(message));
     alertWrapper.appendChild(div);
@@ -133,7 +139,7 @@ const submitNewLocation = (e) => {
 
 
     //add new Location to DOM
-    getUserFavoriteLocationData();
+    updateFavoriteLocationData();
 
     closeForm();
 
@@ -141,8 +147,9 @@ const submitNewLocation = (e) => {
 }
 
 
-const addLocationToStorage = (location) => {
 
+//Add user favorite location to LocalStorage
+const addLocationToStorage = (location) => {
     let itemsFromLocalStorage = getItemsFromLocalStorage();
 
     if (itemsFromLocalStorage !== null) {
@@ -153,34 +160,26 @@ const addLocationToStorage = (location) => {
 
     localStore.push(location);
     localStorage.setItem('locations', JSON.stringify(localStore));
-
 }
 
 
-    //fetch items from local store
+//fetch items from LocalStorage
 const getItemsFromLocalStorage = () => {
-
-
     return localStorage.getItem('locations');
-
 }
 
 
-//Fetch User Favorite Location from local storage and get additional details from API;
-//then run the additional details into the DOM through the function
-
-const getUserFavoriteLocationData = () => {
-
+//Update UI/DOM with User Favorite Locations 
+const updateFavoriteLocationData = () => {
     let itemsFromStorage = getItemsFromLocalStorage();
-
     let parsedLocations = JSON.parse(itemsFromStorage);
 
     if (parsedLocations === null) {
         newLocationList.innerHTML = `<Span><i class="fa fa-info"></i> Nothing to see here. Click below to add a favorite city.</span>`;
         showCreateLocationForm();
     } else {
-        //clear UI
-        newLocationList.innerHTML = '';
+            //clear UI
+            newLocationList.innerHTML = '';
 
             //Add Data to UI
             parsedLocations.forEach(query => {
@@ -188,7 +187,6 @@ const getUserFavoriteLocationData = () => {
                 cityWeatherObj.then((obj) => addLocationToDOM(obj))
             });
     }
-
 }
 
 // Create Location Elements and Add to DOM
@@ -196,6 +194,15 @@ const addLocationToDOM = (locObject) => {
 
     const locationItemDiv = document.createElement('div');
     locationItemDiv.classList.add('location-item');
+
+    const closeItemDiv = document.createElement('div');
+    closeItemDiv.classList.add('close-btn-div');
+
+    const closeItemBtn = document.createElement('button');
+    closeItemBtn.classList.add('close-item-btn');
+    closeItemBtn.innerHTML = `<i class="fa fa-times"></i>`;
+    closeItemDiv.appendChild(closeItemBtn);
+    locationItemDiv.appendChild(closeItemDiv);
 
     const cloudDetailsDiv = document.createElement('div');
     cloudDetailsDiv.classList.add('cloud-details');
@@ -222,9 +229,9 @@ const addLocationToDOM = (locObject) => {
     cloudTextParagraph.appendChild(document.createTextNode(locObject.current.condition.text));
     cloudDetailsDiv.appendChild(newLocImg);
     cloudDetailsDiv.appendChild(cloudTextParagraph);
-    locName.appendChild(document.createTextNode(locObject.location.name));
-    locDetails.appendChild(document.createTextNode(locObject.current.temp_c + 'c'));
-    locTime.appendChild(document.createTextNode(locObject.current.last_updated))
+    locName.appendChild(document.createTextNode(`${locObject.location.name}, ${locObject.location.country}`));
+    locDetails.appendChild(document.createTextNode(locObject.current.temp_c + '\u00B0c'));
+    locTime.appendChild(document.createTextNode(locObject.current.last_updated));
     newLocDetails.appendChild(locName);
     newLocDetails.appendChild(locDetails);
     newLocDetails.appendChild(locTime)
@@ -241,6 +248,19 @@ const fetchWeatherAPIData = async (endpoint, query) => {
     const response = await fetch(`${api.url}/${endpoint}.json?q=${query}&key=${api.key}`)
     const data = await response.json();
     return data;
+}
+
+const toggleMenu = () => {
+    if (menuBtn.classList.contains('closed')) {
+        menuBtn.innerHTML = `<i class="fa fa-chevron-circle-left"></i>`;
+        menuBtn.classList.remove('closed');
+        timelineWrapper.classList.add('show');
+    }
+    else {
+        menuBtn.innerHTML = `<i class="fa fa-chevron-circle-right"></i>`
+        menuBtn.classList.add('closed');
+        timelineWrapper.classList.remove('show');
+    }
 }
 
 
@@ -260,7 +280,20 @@ newInput.addEventListener('blur', () => {
     createLocationDiv.style.boxShadow = '';
 })
 
+menuBtn.addEventListener('click', toggleMenu);
+
 // ON LOAD CALLS
 
-document.addEventListener('DOMContentLoaded', getUserFavoriteLocationData());
+const init = () => {
+    getMyLocation();
+    updateFavoriteLocationData();
+}
 
+//Update Favorite Location when DOM is ready; 
+document.addEventListener('DOMContentLoaded', init);
+
+//also refresh every 30 seconds
+setInterval(() => {
+    getMyLocation();
+    updateFavoriteLocationData();
+}, 30000);
