@@ -57,7 +57,6 @@ const getMyLocation = () => { //get location every 1 minute and update
         //resource for User Current Location
         userCurrentWeather.then(weather => {
             myLocImg.innerHTML = '';
-            console.log(weather)
             const myImgEl = document.createElement('img');
             myImgEl.classList.add('header-loc-img');
             myImgEl.src = weather.current.condition.icon;
