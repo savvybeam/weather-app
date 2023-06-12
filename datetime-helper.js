@@ -85,5 +85,4 @@ const formatDate = (aDate) => {
     return formatedDate;
 }
 
-
 export { getWordedWeekDay, getWordedMonth, formatDate }

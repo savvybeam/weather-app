@@ -238,7 +238,6 @@ const addLocationToDOM = (locObject) => {
     locationItemDiv.appendChild(cloudDetailsDiv);
     locationItemDiv.appendChild(newLocDetails)
     newLocationList.appendChild(locationItemDiv);
-
 }
 
 
