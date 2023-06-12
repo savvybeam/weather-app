@@ -11,7 +11,7 @@ const global = {
 }
 
 let localStore = [];
-const apiURL = "http://api.weatherapi.com/v1";
+const apiURL = "https://api.weatherapi.com/v1";
 
 const yourCity = document.getElementById('city-ticker');
 const temp_deg = document.getElementById('temp');
