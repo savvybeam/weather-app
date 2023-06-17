@@ -48,6 +48,7 @@ body {
     background: linear-gradient(30deg,  var(--body-secondary-color) 70%, var(--body-primary-color) 20%);
 }
 
+
 #nav{
     position: absolute;
     top: 15px;
@@ -81,6 +82,8 @@ body {
     opacity: 0.8;
     transform: translateX(-600px);
     transition: transform 0.3s ease-in-out;
+    z-index:2;
+
 }
 
 .show{
@@ -101,6 +104,16 @@ body {
 #timeline-body {
     margin-top: 30px;
     border-left: 1px solid var(--button-primary-color);
+    position: fixed;
+    bottom: 0;
+    top: 10%;
+    width:90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.details-note{
+    font-size: 1rem;
 }
 
 .location-details-items{
@@ -120,16 +133,17 @@ body {
 .location-details-items::before {
     position: relative;
     content: '';
-    height: 8px;
-    width: 8px;
+    height: 11px;
+    width: 11px;
     border-radius: 50%;
     background-color: var(--body-secondary-deep-color);
-    left: -39px;
+    left: -40px;
 }
 
 #header {
     position: relative;
     display: flex;
+    flex-direction:row-reverse;
     justify-content: space-between;
     align-items: center;
     background-color: var(--button-primary-color);
@@ -138,17 +152,15 @@ body {
     padding: 30px;
 }
 
-#your-loc-image-div{
-    display: flex;
-    justify-content: start;
-    align-items: center;
+#header:hover {
+    box-shadow: var(--button-secondary-color) 0 2px 5px 0;
 }
 
-#your-loc-image-div img{
-    height: 64px;
-    width: 64px;
-    outline: none;
+
+#your-loc-image-div{
+    
 }
+
 
 
 #your-loc-image-div #your-temp-wrapper{
@@ -186,24 +198,21 @@ body {
     height: 150px;
     padding: 30px;
     z-index: 1;
-    opacity: 0.5;
-    background-color: black;
+    opacity: 0.4;
+    background-color: var(--button-secondary-color);
     color: #fff;
 }
 
-#header:hover{
-    box-shadow: var(--button-secondary-color) 0 2px 5px 0;
-}
 
 #loader span{
-    margin: auto;
-    width: 200px;
-    font-size: 20px;
-    transition: all 0.3s;
-}
-
-#loader .show{
-    display: block;
+    position: absolute;
+    top:45%;
+    left:0;
+    width:100%;
+    text-align:center;
+    display:inline-block;
+    font-size:1.7rem;
+    color: var(--body-secondary-deep-color);
 }
 
 #alert-wrapper{
@@ -246,9 +255,10 @@ body {
 #new-location-add {
     position: absolute;
     top: 55vh;
-    left: 515px;
+    left: 85%;
     height: auto;
     padding:5px;
+    z-index:1;
 }
 
 #add-new-btn {
@@ -276,7 +286,7 @@ body {
     color: var(--button-secondary-color);
 }
 
-#new-location-list {
+#new-location-list{
     position: absolute;
     left: 80px;
     background-color: var(--body-primary-color);
@@ -368,7 +378,7 @@ body {
 }
 
 #new-loc-input {
-    width: 350px;
+    width: 100%;
     height: 50px;
     background: transparent;
     border: none;
@@ -405,4 +415,67 @@ body {
 
 #submit-btn:hover i{
     color: #fff;
+}
+
+
+@media (max-width: 600px) {
+    #container {
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    #header {
+       
+    }
+
+    #header i{
+        display:none;
+    }
+
+    #your-loc-image-div{
+        flex-direction:row-reverse;
+        justify-content: space-between;
+    }
+
+    #your-loc-details #date-time {
+        font-size: 15px;
+    }
+
+    #your-loc-details {
+        flex: 1;
+    }
+
+    #added-weather-location {
+        top:-50px;
+    }
+
+    #new-location-list {
+        width: 90vw;
+        margin-top: 30px;
+        margin-left: 5vw;
+        left: 0;
+    }
+
+    #create-new-location-wrapper {
+        width: 90vw;
+        margin-top: 30px;
+        margin-left: 5vw;
+        left: 0;
+    }
+
+    #new-location-add {
+        top: 75vh;
+        left: 80%;
+    }
+
+    .loc-name {
+        font-size: 1.3rem;
+    }
+
+    #alert-wrapper {
+        left: 0;
+        width: 100%;
+    }
 }

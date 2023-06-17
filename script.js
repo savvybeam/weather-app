@@ -30,10 +30,8 @@ const menuBtn = document.getElementById('menu-button');
 const myLocImg = document.getElementById('img-span');
 const timelineWrapper = document.querySelector('.timeline');
 
-
-
-//display loader
-
+//Timeline
+const timelineList = document.getElementById('timeline-body');
 
 
 
@@ -42,6 +40,8 @@ const timelineWrapper = document.querySelector('.timeline');
 
 const getMyLocation = () => { //get location every 1 minute and update
 
+    //display loader
+    loader.style.display = 'block';
 
     navigator.geolocation.getCurrentPosition((pos) => {
         const { latitude, longitude } = pos.coords;
@@ -51,7 +51,6 @@ const getMyLocation = () => { //get location every 1 minute and update
         let query = `${global.coords.latitude},${global.coords.longitude}`;
 
         // fetch data using the Weather API
-
         const userCurrentWeather = fetchWeatherAPIData('current', query);
 
         //resource for User Current Location
@@ -69,17 +68,47 @@ const getMyLocation = () => { //get location every 1 minute and update
             weatherText.innerHTML = weather.current.condition.text;
             dateTime.innerHTML = formatDate(weather.current.last_updated);
 
+            //save location history to Local Storage
+            addLocationToStorage(weather.location.name, 'history');
+            
         });
 
+        //hide loader
+        loader.style.display = 'none';
+        
     });
 
+    
 }
 
 
 
 // FUNCTIONS
 
+//Pull locationVisited history from Local Storage
+const loadTimeLineItemIntoDOM = () => {
 
+    timelineList.innerHTML = '';
+
+    //get and parse items from Location Storage: history
+
+    const historyFromLocalStorage = JSON.parse(getItemsFromLocalStorage('history'));
+
+    //get each history item and spit out on timeline
+    historyFromLocalStorage.forEach(result => {
+
+        const tli = document.createElement('div');
+        tli.classList.add('location-details-items');
+
+        const tliCity = document.createElement('span');
+        tliCity.classList.add('details-note');
+        tliCity.appendChild(document.createTextNode(`${result.locationName}: ${result.timeStamp}`));
+
+        tli.appendChild(tliCity);
+        timelineList.appendChild(tli);
+
+    });
+}
 
 //Added Font Awesome Icon to an Element
 const addFontAweIconToParent = (parent, iconClass) =>{
@@ -147,10 +176,21 @@ const submitNewLocation = (e) => {
 }
 
 
-
 //Add user favorite location to LocalStorage
-const addLocationToStorage = (location) => {
-    let itemsFromLocalStorage = getItemsFromLocalStorage();
+const addLocationToStorage = (location, storeType) => {
+    let locationVar;
+    let itemsFromLocalStorage = getItemsFromLocalStorage(storeType);
+
+    if (storeType === 'favorites') {
+        locationVar = location;
+    }
+
+    if (storeType === 'history') {
+        locationVar = {
+                locationName: location,
+                timeStamp: formatDate(new Date)
+        }
+    }
 
     if (itemsFromLocalStorage !== null) {
         localStore = [];
@@ -158,24 +198,27 @@ const addLocationToStorage = (location) => {
         localStore = parsedLocation;
     }
 
-    localStore.push(location);
-    localStorage.setItem('locations', JSON.stringify(localStore));
+    localStore.push(locationVar);
+    localStorage.setItem(storeType, JSON.stringify(localStore));
+
+    localStore = [];
 }
 
 
-//fetch items from LocalStorage
-const getItemsFromLocalStorage = () => {
-    return localStorage.getItem('locations');
+
+//fetch items from LocalStorage: Favorite Location or History
+const getItemsFromLocalStorage = (source) => {
+    return localStorage.getItem(source);
 }
 
 
 //Update UI/DOM with User Favorite Locations 
 const updateFavoriteLocationData = () => {
-    let itemsFromStorage = getItemsFromLocalStorage();
+    let itemsFromStorage = getItemsFromLocalStorage('favorites');
     let parsedLocations = JSON.parse(itemsFromStorage);
 
     if (parsedLocations === null) {
-        newLocationList.innerHTML = `<Span><i class="fa fa-info"></i> Nothing to see here. Click below to add a favorite city.</span>`;
+        newLocationList.innerHTML = `<Span><i class="fa fa-info-circle"></i> Nothing to see. Click below to add a favorite city.</span>`;
         showCreateLocationForm();
     } else {
             //clear UI
@@ -285,6 +328,7 @@ menuBtn.addEventListener('click', toggleMenu);
 const init = () => {
     getMyLocation();
     updateFavoriteLocationData();
+    loadTimeLineItemIntoDOM();
 }
 
 //Update Favorite Location when DOM is ready; 
@@ -295,3 +339,8 @@ setInterval(() => {
     getMyLocation();
     updateFavoriteLocationData();
 }, 30000);
+
+//update Location Timeline every 2 minutes
+setInterval(() => {
+    loadTimeLineItemIntoDOM();
+}, 120000);
