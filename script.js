@@ -163,7 +163,7 @@ const submitNewLocation = (e) => {
     }
 
     //add new Location to Local Storage
-    addLocationToStorage(newLocation);
+    addLocationToStorage(newLocation, 'favorites');
     newInput.value = ''; //set the form input to Empty after submission
 
 
