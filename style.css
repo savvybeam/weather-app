@@ -112,7 +112,27 @@ body {
     overflow-x: hidden;
 }
 
-.details-note{
+#timeline-header{
+    display:flex;
+    justify-content:space-between;
+}
+
+#btn-clear-timeline {
+    padding:5px;
+    background: transparent;
+    border: none;
+}
+
+#btn-clear-timeline i{
+    color: var(--button-primary-color);
+}
+
+#btn-clear-timeline:hover i {
+    color: var(--button-secondary-color);
+    cursor: pointer;
+}
+
+.details-note {
     font-size: 1rem;
 }
 

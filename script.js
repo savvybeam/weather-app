@@ -32,6 +32,7 @@ const timelineWrapper = document.querySelector('.timeline');
 
 //Timeline
 const timelineList = document.getElementById('timeline-body');
+const btnClearTimeLine = document.getElementById('btn-clear-timeline');
 
 
 
@@ -61,10 +62,9 @@ const getMyLocation = () => { //get location every 1 minute and update
             myImgEl.src = weather.current.condition.icon;
             myLocImg.appendChild(myImgEl);
             yourCity.innerHTML = weather.location.name;
-            addFontAweIconToParent(yourCity, 'fa-map-marker')
+            addFontAweIconToParent(yourCity, 'fa-map-marker');
             temp_deg.innerHTML = `<span>Main: ${weather.current.temp_c}\u00B0c</span>`;
             temp_feels.innerHTML = `<span>Feels Like: ${weather.current.feelslike_c}\u00B0c</span>`;
-            addFontAweIconToParent(weatherText, 'fa-map-marker')
             weatherText.innerHTML = weather.current.condition.text;
             dateTime.innerHTML = formatDate(weather.current.last_updated);
 
@@ -85,6 +85,34 @@ const getMyLocation = () => { //get location every 1 minute and update
 
 // FUNCTIONS
 
+
+//Clear Timeline items
+const clearTimeLine = (e) => {
+    if (e.target.classList.contains('fa-trash-alt')) {
+
+        if (confirm('Clear timeline?')) {
+            let timeLineStorage = getItemsFromLocalStorage('history');
+
+            if (timeLineStorage !== null) {
+                localStorage.clear();
+                timelineList.innerHTML = '<i class="fa fa-info-circle"></i> Nothing to see. Check back soon.';
+            } else {
+                createAlert('Nothing to clear');
+                alertWrapper.classList.add('show');
+                setTimeout(() => {
+                    alertWrapper.classList.remove('show');
+                    alertWrapper.firstElementChild.remove();
+                }, 4000);
+
+                return;
+
+            }
+        }
+
+        
+    }
+}
+
 //Pull locationVisited history from Local Storage
 const loadTimeLineItemIntoDOM = () => {
 
@@ -92,7 +120,10 @@ const loadTimeLineItemIntoDOM = () => {
 
     //get and parse items from Location Storage: history
 
-    const historyFromLocalStorage = JSON.parse(getItemsFromLocalStorage('history'));
+    let historyFromLocalStorage = JSON.parse(getItemsFromLocalStorage('history'));
+
+    //show the timeline from recency to oldies
+    historyFromLocalStorage = historyFromLocalStorage.reverse();
 
     //get each history item and spit out on timeline
     historyFromLocalStorage.forEach(result => {
@@ -201,6 +232,8 @@ const addLocationToStorage = (location, storeType) => {
     localStore.push(locationVar);
     localStorage.setItem(storeType, JSON.stringify(localStore));
 
+    //reset the global array... 
+    //it can cause unpredictable outcomes if not cleared since another local storage array uses it
     localStore = [];
 }
 
@@ -323,6 +356,8 @@ newInput.addEventListener('blur', () => {
 
 menuBtn.addEventListener('click', toggleMenu);
 
+btnClearTimeLine.addEventListener('click', clearTimeLine);
+
 // ON LOAD CALLS
 
 const init = () => {
@@ -344,3 +379,8 @@ setInterval(() => {
 setInterval(() => {
     loadTimeLineItemIntoDOM();
 }, 120000);
+
+
+
+
+//NO ERRORS HANDLED AS OF YET: JUNE 17, 2023
