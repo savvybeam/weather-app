@@ -7,7 +7,8 @@ const global = {
     coords : {
         latitude : 0.00,
         longitude : 0.00
-    }
+    },
+    locationName: ''
 }
 
 let localStore = [];
@@ -29,6 +30,7 @@ const alertWrapper = document.getElementById('alert-wrapper');
 const menuBtn = document.getElementById('menu-button');
 const myLocImg = document.getElementById('img-span');
 const timelineWrapper = document.querySelector('.timeline');
+const pageTitle = document.getElementById('title');
 
 //Timeline
 const timelineList = document.getElementById('timeline-body');
@@ -68,6 +70,7 @@ const getMyLocation = () => { //get location every 1 minute and update
             weatherText.innerHTML = weather.current.condition.text;
             dateTime.innerHTML = formatDate(weather.current.last_updated);
 
+
             //save location history to Local Storage
             addLocationToStorage(weather.location.name, 'history');
             
@@ -88,7 +91,8 @@ const getMyLocation = () => { //get location every 1 minute and update
 
 //Clear Timeline items
 const clearTimeLine = (e) => {
-    if (e.target.classList.contains('fa-trash-alt')) {
+    console.log(e.target.parentElement.id);
+    if (e.target.parentElement.id === 'btn-clear-timeline') {
 
         if (confirm('Clear timeline?')) {
             let timeLineStorage = getItemsFromLocalStorage('history');
